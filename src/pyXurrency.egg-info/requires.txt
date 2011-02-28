@@ -1,0 +1,6 @@
+
+
+[test]
+Nose
+minimock
+pep8

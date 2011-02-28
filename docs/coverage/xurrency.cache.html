@@ -1,0 +1,146 @@
+<html>
+<head>
+<title>xurrency.cache</title>
+</head>
+<body>
+xurrency.cache
+<style>
+.coverage pre {float: left; margin: 0px 1em; border: none;
+               padding: 0px; }
+.num pre { margin: 0px }
+.nocov, .nocov pre {background-color: #faa}
+.cov, .cov pre {background-color: #cfc}
+div.coverage div { clear: both; height: 1.1em}
+</style>
+<div class="stats">
+Covered: 99 lines<br/>
+Missed: 3 lines<br/>
+Skipped 19 lines<br/>
+Percent: 97 %<br/>
+
+</div>
+<div class="coverage">
+<div class="cov"><span class="num"><pre>  1</pre></span><pre>import datetime</pre></div>
+<div class="skip"><span class="num"><pre>  2</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre>  3</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>  4</pre></span><pre>class TimeValue(object):</pre></div>
+<div class="cov"><span class="num"><pre>  5</pre></span><pre>    def __init__(self, value, dt):</pre></div>
+<div class="cov"><span class="num"><pre>  6</pre></span><pre>        self.value = value</pre></div>
+<div class="cov"><span class="num"><pre>  7</pre></span><pre>        self.datetime = dt</pre></div>
+<div class="skip"><span class="num"><pre>  8</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre>  9</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 10</pre></span><pre>class CacheWithTimeLimitError(Exception):</pre></div>
+<div class="cov"><span class="num"><pre> 11</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre> 12</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre> 13</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 14</pre></span><pre>class CacheWithTimeLimit(object):</pre></div>
+<div class="cov"><span class="num"><pre> 15</pre></span><pre>    def __init__(self, seconds=0):</pre></div>
+<div class="cov"><span class="num"><pre> 16</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 17</pre></span><pre>        &gt;&gt;&gt; c = CacheWithTimeLimit(-1)</pre></div>
+<div class="cov"><span class="num"><pre> 18</pre></span><pre>        Traceback (most recent call last):</pre></div>
+<div class="cov"><span class="num"><pre> 19</pre></span><pre>        ...</pre></div>
+<div class="cov"><span class="num"><pre> 20</pre></span><pre>        CacheWithTimeLimitError: Please specify the value of 0 or more.</pre></div>
+<div class="skip"><span class="num"><pre> 21</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 22</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 23</pre></span><pre>        if seconds &lt; 0:</pre></div>
+<div class="cov"><span class="num"><pre> 24</pre></span><pre>            raise CacheWithTimeLimitError(\</pre></div>
+<div class="cov"><span class="num"><pre> 25</pre></span><pre>                    &quot;Please specify the value of 0 or more.&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 26</pre></span><pre>        self._cache = {}</pre></div>
+<div class="cov"><span class="num"><pre> 27</pre></span><pre>        self._seconds = seconds</pre></div>
+<div class="skip"><span class="num"><pre> 28</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 29</pre></span><pre>    def __iter__(self):</pre></div>
+<div class="nocov"><span class="num"><pre> 30</pre></span><pre>        return self</pre></div>
+<div class="skip"><span class="num"><pre> 31</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 32</pre></span><pre>    def is_cache(self, key, dt=datetime.datetime.utcnow()):</pre></div>
+<div class="cov"><span class="num"><pre> 33</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 34</pre></span><pre>        &gt;&gt;&gt; c = CacheWithTimeLimit(100)</pre></div>
+<div class="cov"><span class="num"><pre> 35</pre></span><pre>        &gt;&gt;&gt; c.is_cache(&quot;key&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 36</pre></span><pre>        False</pre></div>
+<div class="cov"><span class="num"><pre> 37</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key&quot;, &quot;value&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 38</pre></span><pre>        &gt;&gt;&gt; c.is_cache(&quot;key&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 39</pre></span><pre>        True</pre></div>
+<div class="cov"><span class="num"><pre> 40</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 41</pre></span><pre>        if key in self._cache:</pre></div>
+<div class="cov"><span class="num"><pre> 42</pre></span><pre>            add_data_time = dt - self._cache[key].datetime</pre></div>
+<div class="cov"><span class="num"><pre> 43</pre></span><pre>            cache_seconds = datetime.timedelta(seconds=self._seconds)</pre></div>
+<div class="cov"><span class="num"><pre> 44</pre></span><pre>            if add_data_time &gt;= cache_seconds:</pre></div>
+<div class="cov"><span class="num"><pre> 45</pre></span><pre>                return False</pre></div>
+<div class="cov"><span class="num"><pre> 46</pre></span><pre>            else:</pre></div>
+<div class="cov"><span class="num"><pre> 47</pre></span><pre>                return True</pre></div>
+<div class="cov"><span class="num"><pre> 48</pre></span><pre>        else:</pre></div>
+<div class="cov"><span class="num"><pre> 49</pre></span><pre>            return False</pre></div>
+<div class="skip"><span class="num"><pre> 50</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 51</pre></span><pre>    def get(self, key):</pre></div>
+<div class="cov"><span class="num"><pre> 52</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 53</pre></span><pre>        &gt;&gt;&gt; c = CacheWithTimeLimit()</pre></div>
+<div class="cov"><span class="num"><pre> 54</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key&quot;, &quot;value&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 55</pre></span><pre>        &gt;&gt;&gt; c.get(&quot;key&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 56</pre></span><pre>        'value'</pre></div>
+<div class="cov"><span class="num"><pre> 57</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 58</pre></span><pre>        return self._cache[key].value</pre></div>
+<div class="skip"><span class="num"><pre> 59</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 60</pre></span><pre>    def add(self, key, value, dt=datetime.datetime.utcnow()):</pre></div>
+<div class="cov"><span class="num"><pre> 61</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 62</pre></span><pre>        Add Data.</pre></div>
+<div class="skip"><span class="num"><pre> 63</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 64</pre></span><pre>        The cash time is assumed to be 100 seconds.</pre></div>
+<div class="cov"><span class="num"><pre> 65</pre></span><pre>        &gt;&gt;&gt; c = CacheWithTimeLimit(100)</pre></div>
+<div class="cov"><span class="num"><pre> 66</pre></span><pre>        &gt;&gt;&gt; nt = datetime.datetime.utcnow()</pre></div>
+<div class="cov"><span class="num"><pre> 67</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key&quot;, &quot;value&quot;, nt)</pre></div>
+<div class="cov"><span class="num"><pre> 68</pre></span><pre>        &gt;&gt;&gt; c._cache[&quot;key&quot;].value</pre></div>
+<div class="cov"><span class="num"><pre> 69</pre></span><pre>        'value'</pre></div>
+<div class="cov"><span class="num"><pre> 70</pre></span><pre>        &gt;&gt;&gt; c._cache[&quot;key&quot;].datetime == nt</pre></div>
+<div class="cov"><span class="num"><pre> 71</pre></span><pre>        True</pre></div>
+<div class="skip"><span class="num"><pre> 72</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 73</pre></span><pre>        The value is not updated until the cash time passes.</pre></div>
+<div class="cov"><span class="num"><pre> 74</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key&quot;, &quot;new_value&quot;,nt)</pre></div>
+<div class="cov"><span class="num"><pre> 75</pre></span><pre>        &gt;&gt;&gt; c.get(&quot;key&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 76</pre></span><pre>        'value'</pre></div>
+<div class="skip"><span class="num"><pre> 77</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 78</pre></span><pre>        When the cash time passes, the value is updated.</pre></div>
+<div class="cov"><span class="num"><pre> 79</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key&quot;, &quot;new_value2&quot;, nt+datetime.timedelta(seconds=101))</pre></div>
+<div class="cov"><span class="num"><pre> 80</pre></span><pre>        &gt;&gt;&gt; c.get(&quot;key&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 81</pre></span><pre>        'new_value2'</pre></div>
+<div class="cov"><span class="num"><pre> 82</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 83</pre></span><pre>        if not self.is_cache(key, dt):</pre></div>
+<div class="cov"><span class="num"><pre> 84</pre></span><pre>            dv = TimeValue(value, dt)</pre></div>
+<div class="cov"><span class="num"><pre> 85</pre></span><pre>            self._cache[key] = dv</pre></div>
+<div class="skip"><span class="num"><pre> 86</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 87</pre></span><pre>    def delete(self, key):</pre></div>
+<div class="cov"><span class="num"><pre> 88</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 89</pre></span><pre>        Delete cache data.</pre></div>
+<div class="skip"><span class="num"><pre> 90</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 91</pre></span><pre>        &gt;&gt;&gt; c=CacheWithTimeLimit()</pre></div>
+<div class="cov"><span class="num"><pre> 92</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key&quot;,&quot;value&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 93</pre></span><pre>        &gt;&gt;&gt; c.delete(&quot;key&quot;)</pre></div>
+<div class="cov"><span class="num"><pre> 94</pre></span><pre>        &gt;&gt;&gt; c._cache[&quot;key&quot;]</pre></div>
+<div class="cov"><span class="num"><pre> 95</pre></span><pre>        Traceback (most recent call last):</pre></div>
+<div class="cov"><span class="num"><pre> 96</pre></span><pre>        ...</pre></div>
+<div class="cov"><span class="num"><pre> 97</pre></span><pre>        KeyError: 'key'</pre></div>
+<div class="cov"><span class="num"><pre> 98</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 99</pre></span><pre>        del self._cache[key]</pre></div>
+<div class="skip"><span class="num"><pre>100</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>101</pre></span><pre>    def flush(self):</pre></div>
+<div class="cov"><span class="num"><pre>102</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre>103</pre></span><pre>        &gt;&gt;&gt; c=CacheWithTimeLimit()</pre></div>
+<div class="cov"><span class="num"><pre>104</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key1&quot;,&quot;value1&quot;)</pre></div>
+<div class="cov"><span class="num"><pre>105</pre></span><pre>        &gt;&gt;&gt; c.add(&quot;key2&quot;,&quot;value2&quot;)</pre></div>
+<div class="cov"><span class="num"><pre>106</pre></span><pre>        &gt;&gt;&gt; c.flush()</pre></div>
+<div class="cov"><span class="num"><pre>107</pre></span><pre>        &gt;&gt;&gt; c.get(&quot;key1&quot;)</pre></div>
+<div class="cov"><span class="num"><pre>108</pre></span><pre>        Traceback (most recent call last):</pre></div>
+<div class="cov"><span class="num"><pre>109</pre></span><pre>        ...</pre></div>
+<div class="cov"><span class="num"><pre>110</pre></span><pre>        KeyError: 'key1'</pre></div>
+<div class="cov"><span class="num"><pre>111</pre></span><pre>        &gt;&gt;&gt; c.get(&quot;key2&quot;)</pre></div>
+<div class="cov"><span class="num"><pre>112</pre></span><pre>        Traceback (most recent call last):</pre></div>
+<div class="cov"><span class="num"><pre>113</pre></span><pre>        ...</pre></div>
+<div class="cov"><span class="num"><pre>114</pre></span><pre>        KeyError: 'key2'</pre></div>
+<div class="cov"><span class="num"><pre>115</pre></span><pre>        &quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre>116</pre></span><pre>        self._cache = {}</pre></div>
+<div class="skip"><span class="num"><pre>117</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>118</pre></span><pre>if __name__ == &quot;__main__&quot;:</pre></div>
+<div class="nocov"><span class="num"><pre>119</pre></span><pre>    import doctest</pre></div>
+<div class="nocov"><span class="num"><pre>120</pre></span><pre>    doctest.testmod()</pre></div>
+<div class="skip"><span class="num"><pre>121</pre></span><pre></pre></div>
+</div>
+</body>
+</html>

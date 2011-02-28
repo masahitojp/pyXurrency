@@ -1,0 +1,141 @@
+<html>
+<head>
+<title>xurrency.api</title>
+</head>
+<body>
+xurrency.api
+<style>
+.coverage pre {float: left; margin: 0px 1em; border: none;
+               padding: 0px; }
+.num pre { margin: 0px }
+.nocov, .nocov pre {background-color: #faa}
+.cov, .cov pre {background-color: #cfc}
+div.coverage div { clear: both; height: 1.1em}
+</style>
+<div class="stats">
+Covered: 84 lines<br/>
+Missed: 4 lines<br/>
+Skipped 28 lines<br/>
+Percent: 95 %<br/>
+
+</div>
+<div class="coverage">
+<div class="cov"><span class="num"><pre>  1</pre></span><pre>import urllib2</pre></div>
+<div class="cov"><span class="num"><pre>  2</pre></span><pre>import json</pre></div>
+<div class="cov"><span class="num"><pre>  3</pre></span><pre>import datetime</pre></div>
+<div class="cov"><span class="num"><pre>  4</pre></span><pre>import xurrency.cache</pre></div>
+<div class="skip"><span class="num"><pre>  5</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>  6</pre></span><pre>'''</pre></div>
+<div class="cov"><span class="num"><pre>  7</pre></span><pre>link      http://xurrency.com</pre></div>
+<div class="cov"><span class="num"><pre>  8</pre></span><pre>'''</pre></div>
+<div class="skip"><span class="num"><pre>  9</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre> 10</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 11</pre></span><pre>class Xurrency(object):</pre></div>
+<div class="cov"><span class="num"><pre> 12</pre></span><pre>    CURRENCIES_INVALID = 2</pre></div>
+<div class="cov"><span class="num"><pre> 13</pre></span><pre>    LIMIT_REACHED = 3</pre></div>
+<div class="cov"><span class="num"><pre> 14</pre></span><pre>    API_KEY_INVALID = 4</pre></div>
+<div class="cov"><span class="num"><pre> 15</pre></span><pre>    API_KEY_EXPIRED = 5</pre></div>
+<div class="skip"><span class="num"><pre> 16</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 17</pre></span><pre>    CURRENCIES = \</pre></div>
+<div class="cov"><span class="num"><pre> 18</pre></span><pre>        [&quot;eur&quot;, &quot;usd&quot;, &quot;gbp&quot;, &quot;aud&quot;, &quot;brl&quot;, &quot;cad&quot;, &quot;chf&quot;, &quot;cny&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 19</pre></span><pre>         &quot;dkk&quot;, &quot;hkd&quot;, &quot;inr&quot;, &quot;jpy&quot;, &quot;krw&quot;, &quot;lkr&quot;, &quot;myr&quot;, &quot;nzd&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 20</pre></span><pre>         &quot;sgd&quot;, &quot;uwd&quot;, &quot;zar&quot;, &quot;thb&quot;, &quot;sek&quot;, &quot;nok&quot;, &quot;mxn&quot;, &quot;bgn&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 21</pre></span><pre>         &quot;czk&quot;, &quot;uek&quot;, &quot;huf&quot;, &quot;ltl&quot;, &quot;lvl&quot;, &quot;pln&quot;, &quot;ron&quot;, &quot;skk&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 22</pre></span><pre>         &quot;isk&quot;, &quot;hrk&quot;, &quot;rub&quot;, &quot;try&quot;, &quot;php&quot;, &quot;cop&quot;, &quot;ars&quot;, &quot;clp&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 23</pre></span><pre>         &quot;svc&quot;, &quot;tnd&quot;, &quot;pyg&quot;, &quot;mad&quot;, &quot;jmd&quot;, &quot;sar&quot;, &quot;qar&quot;, &quot;hnl&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 24</pre></span><pre>         &quot;syp&quot;, &quot;kwd&quot;, &quot;bhd&quot;, &quot;egp&quot;, &quot;omr&quot;, &quot;ngn&quot;, &quot;pab&quot;, &quot;pen&quot;,</pre></div>
+<div class="cov"><span class="num"><pre> 25</pre></span><pre>         &quot;ils&quot;, &quot;uyu&quot;, &quot;aed&quot;]</pre></div>
+<div class="skip"><span class="num"><pre> 26</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 27</pre></span><pre>    def __init__(self, key=None, cache_seconds=86400):</pre></div>
+<div class="cov"><span class="num"><pre> 28</pre></span><pre>        self._key = key</pre></div>
+<div class="cov"><span class="num"><pre> 29</pre></span><pre>        self._cache = xurrency.cache.CacheWithTimeLimit(cache_seconds)</pre></div>
+<div class="cov"><span class="num"><pre> 30</pre></span><pre>        self._base_url = 'http://xurrency.com/api/%s/%s/1'</pre></div>
+<div class="skip"><span class="num"><pre> 31</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 32</pre></span><pre>    def getRate(self, base, target, amount=1):</pre></div>
+<div class="cov"><span class="num"><pre> 33</pre></span><pre>        rate = self._makeRequest(base, target)</pre></div>
+<div class="cov"><span class="num"><pre> 34</pre></span><pre>        return (amount * rate['value'])</pre></div>
+<div class="skip"><span class="num"><pre> 35</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 36</pre></span><pre>    def _makeRequest(self, base, target):</pre></div>
+<div class="cov"><span class="num"><pre> 37</pre></span><pre>        if (base not in self.CURRENCIES) or (target not in self.CURRENCIES):</pre></div>
+<div class="cov"><span class="num"><pre> 38</pre></span><pre>            raise XurrencyError(&quot;Invalid currency codes.&quot;)</pre></div>
+<div class="skip"><span class="num"><pre> 39</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 40</pre></span><pre>        if self._isCached(self._createKey(base, target)):</pre></div>
+<div class="nocov"><span class="num"><pre> 41</pre></span><pre>            result = self._getCache(self._createKey(base, target))</pre></div>
+<div class="cov"><span class="num"><pre> 42</pre></span><pre>        else:</pre></div>
+<div class="cov"><span class="num"><pre> 43</pre></span><pre>            api_url = self._base_url % (base, target)</pre></div>
+<div class="cov"><span class="num"><pre> 44</pre></span><pre>            if self._key:</pre></div>
+<div class="nocov"><span class="num"><pre> 45</pre></span><pre>                api_url += '?key=%s' % (self._key)</pre></div>
+<div class="cov"><span class="num"><pre> 46</pre></span><pre>            try:</pre></div>
+<div class="cov"><span class="num"><pre> 47</pre></span><pre>                resp = urllib2.urlopen(api_url)</pre></div>
+<div class="cov"><span class="num"><pre> 48</pre></span><pre>                data = resp.read()</pre></div>
+<div class="cov"><span class="num"><pre> 49</pre></span><pre>            except urllib2.HTTPError, error:</pre></div>
+<div class="cov"><span class="num"><pre> 50</pre></span><pre>                raise XurrencyHTTPError(error)</pre></div>
+<div class="cov"><span class="num"><pre> 51</pre></span><pre>            except urllib2.URLError as e:</pre></div>
+<div class="cov"><span class="num"><pre> 52</pre></span><pre>                raise XurrencyURLError(e)</pre></div>
+<div class="skip"><span class="num"><pre> 53</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 54</pre></span><pre>            jsondata = json.loads(data)</pre></div>
+<div class="skip"><span class="num"><pre> 55</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 56</pre></span><pre>            if jsondata['status'] == 'fail':</pre></div>
+<div class="cov"><span class="num"><pre> 57</pre></span><pre>                response_code = jsondata['code']</pre></div>
+<div class="cov"><span class="num"><pre> 58</pre></span><pre>                message = jsondata['message']</pre></div>
+<div class="cov"><span class="num"><pre> 59</pre></span><pre>                if response_code == self.LIMIT_REACHED:</pre></div>
+<div class="cov"><span class="num"><pre> 60</pre></span><pre>                    if (self._createKey(base, target) \</pre></div>
+<div class="cov"><span class="num"><pre> 61</pre></span><pre>                            not in self._cache._cache):</pre></div>
+<div class="cov"><span class="num"><pre> 62</pre></span><pre>                        raise XurrencyAPILimitReachedError(message)</pre></div>
+<div class="cov"><span class="num"><pre> 63</pre></span><pre>                elif response_code == self.CURRENCIES_INVALID:</pre></div>
+<div class="cov"><span class="num"><pre> 64</pre></span><pre>                    raise XurrencyAPIInvalidCurrenciesError(message)</pre></div>
+<div class="cov"><span class="num"><pre> 65</pre></span><pre>                elif response_code == self.API_KEY_INVALID or \</pre></div>
+<div class="cov"><span class="num"><pre> 66</pre></span><pre>                         response_code == self.API_KEY_EXPIRED:</pre></div>
+<div class="cov"><span class="num"><pre> 67</pre></span><pre>                    raise XurrencyAPIInvalidKeyError(message)</pre></div>
+<div class="cov"><span class="num"><pre> 68</pre></span><pre>                else:</pre></div>
+<div class="cov"><span class="num"><pre> 69</pre></span><pre>                    raise XurrencyError(message)</pre></div>
+<div class="cov"><span class="num"><pre> 70</pre></span><pre>            else:</pre></div>
+<div class="cov"><span class="num"><pre> 71</pre></span><pre>                result = jsondata['result']</pre></div>
+<div class="cov"><span class="num"><pre> 72</pre></span><pre>                self._setCache(self._createKey(base, target), result,\</pre></div>
+<div class="cov"><span class="num"><pre> 73</pre></span><pre>                        datetime.datetime.strptime(result['updated_at'],\</pre></div>
+<div class="cov"><span class="num"><pre> 74</pre></span><pre>                            '%Y-%m-%dT%H:%M:%SZ'))</pre></div>
+<div class="cov"><span class="num"><pre> 75</pre></span><pre>        return result</pre></div>
+<div class="skip"><span class="num"><pre> 76</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 77</pre></span><pre>    def _createKey(self, base, target):</pre></div>
+<div class="cov"><span class="num"><pre> 78</pre></span><pre>        return &quot;%s:%s&quot; % (base, target)</pre></div>
+<div class="skip"><span class="num"><pre> 79</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 80</pre></span><pre>    def _setCache(self, key, value, dt):</pre></div>
+<div class="cov"><span class="num"><pre> 81</pre></span><pre>        self._cache.add(key, value, dt)</pre></div>
+<div class="skip"><span class="num"><pre> 82</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 83</pre></span><pre>    def _getCache(self, key):</pre></div>
+<div class="nocov"><span class="num"><pre> 84</pre></span><pre>        return self._cache.get(key)</pre></div>
+<div class="skip"><span class="num"><pre> 85</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 86</pre></span><pre>    def _isCached(self, key):</pre></div>
+<div class="cov"><span class="num"><pre> 87</pre></span><pre>        return self._cache.is_cache(key)</pre></div>
+<div class="skip"><span class="num"><pre> 88</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 89</pre></span><pre>    def _flushCache(self):</pre></div>
+<div class="nocov"><span class="num"><pre> 90</pre></span><pre>        self._cache.flush()</pre></div>
+<div class="skip"><span class="num"><pre> 91</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre> 92</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 93</pre></span><pre>class XurrencyError(Exception):</pre></div>
+<div class="cov"><span class="num"><pre> 94</pre></span><pre>    &quot;&quot;&quot;Base class for exceptions in this module.&quot;&quot;&quot;</pre></div>
+<div class="cov"><span class="num"><pre> 95</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre> 96</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre> 97</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre> 98</pre></span><pre>class XurrencyAPILimitReachedError(XurrencyError):</pre></div>
+<div class="cov"><span class="num"><pre> 99</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre>100</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre>101</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>102</pre></span><pre>class XurrencyAPIInvalidCurrenciesError(XurrencyError):</pre></div>
+<div class="cov"><span class="num"><pre>103</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre>104</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre>105</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>106</pre></span><pre>class XurrencyAPIInvalidKeyError(XurrencyError):</pre></div>
+<div class="cov"><span class="num"><pre>107</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre>108</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre>109</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>110</pre></span><pre>class XurrencyHTTPError(XurrencyError):</pre></div>
+<div class="cov"><span class="num"><pre>111</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre>112</pre></span><pre></pre></div>
+<div class="skip"><span class="num"><pre>113</pre></span><pre></pre></div>
+<div class="cov"><span class="num"><pre>114</pre></span><pre>class XurrencyURLError(XurrencyError):</pre></div>
+<div class="cov"><span class="num"><pre>115</pre></span><pre>    pass</pre></div>
+<div class="skip"><span class="num"><pre>116</pre></span><pre></pre></div>
+</div>
+</body>
+</html>
