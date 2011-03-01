@@ -29,16 +29,16 @@ class Xurrency(object):
         self._cache = xurrency.cache.CacheWithTimeLimit(cache_seconds)
         self._base_url = 'http://xurrency.com/api/%s/%s/1'
 
-    def getRate(self, base, target, amount=1):
-        rate = self._makeRequest(base, target)
+    def get_rate(self, base, target, amount=1):
+        rate = self._make_request(base, target)
         return (amount * rate['value'])
 
-    def _makeRequest(self, base, target):
+    def _make_request(self, base, target):
         if (base not in self.CURRENCIES) or (target not in self.CURRENCIES):
             raise XurrencyError("Invalid currency codes.")
 
-        if self._isCached(self._createKey(base, target)):
-            result = self._getCache(self._createKey(base, target))
+        if self._is_cached(self._create_key(base, target)):
+            result = self._get_cache(self._create_key(base, target))
         else:
             api_url = self._base_url % (base, target)
             if self._key:
@@ -57,7 +57,7 @@ class Xurrency(object):
                 response_code = jsondata['code']
                 message = jsondata['message']
                 if response_code == self.LIMIT_REACHED:
-                    if (self._createKey(base, target) \
+                    if (self._create_key(base, target) \
                             not in self._cache._cache):
                         raise XurrencyAPILimitReachedError(message)
                 elif response_code == self.CURRENCIES_INVALID:
@@ -69,24 +69,24 @@ class Xurrency(object):
                     raise XurrencyError(message)
             else:
                 result = jsondata['result']
-                self._setCache(self._createKey(base, target), result,\
+                self._set_cache(self._create_key(base, target), result,\
                         datetime.datetime.strptime(result['updated_at'],\
                             '%Y-%m-%dT%H:%M:%SZ'))
         return result
 
-    def _createKey(self, base, target):
+    def _create_key(self, base, target):
         return "%s:%s" % (base, target)
 
-    def _setCache(self, key, value, dt):
-        self._cache.add(key, value, dt)
+    def _set_cache(self, key, value, dt):
+        self._cache.set(key, value, dt)
 
-    def _getCache(self, key):
+    def _get_cache(self, key):
         return self._cache.get(key)
 
-    def _isCached(self, key):
+    def _is_cached(self, key):
         return self._cache.is_cache(key)
 
-    def _flushCache(self):
+    def _flush_cache(self):
         self._cache.flush()
 
 

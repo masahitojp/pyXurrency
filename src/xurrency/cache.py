@@ -34,7 +34,7 @@ class CacheWithTimeLimit(object):
         >>> c = CacheWithTimeLimit(100)
         >>> c.is_cache("key")
         False
-        >>> c.add("key", "value")
+        >>> c.set("key", "value")
         >>> c.is_cache("key")
         True
         """
@@ -51,32 +51,32 @@ class CacheWithTimeLimit(object):
     def get(self, key):
         """
         >>> c = CacheWithTimeLimit()
-        >>> c.add("key", "value")
+        >>> c.set("key", "value")
         >>> c.get("key")
         'value'
         """
         return self._cache[key].value
 
-    def add(self, key, value, dt=datetime.datetime.utcnow()):
+    def set(self, key, value, dt=datetime.datetime.utcnow()):
         """
         Add Data.
 
         The cash time is assumed to be 100 seconds.
         >>> c = CacheWithTimeLimit(100)
         >>> nt = datetime.datetime.utcnow()
-        >>> c.add("key", "value", nt)
+        >>> c.set("key", "value", nt)
         >>> c._cache["key"].value
         'value'
         >>> c._cache["key"].datetime == nt
         True
 
         The value is not updated until the cash time passes.
-        >>> c.add("key", "new_value",nt)
+        >>> c.set("key", "new_value",nt)
         >>> c.get("key")
         'value'
 
         When the cash time passes, the value is updated.
-        >>> c.add("key", "new_value2", nt+datetime.timedelta(seconds=101))
+        >>> c.set("key", "new_value2", nt+datetime.timedelta(seconds=101))
         >>> c.get("key")
         'new_value2'
         """
@@ -89,7 +89,7 @@ class CacheWithTimeLimit(object):
         Delete cache data.
 
         >>> c=CacheWithTimeLimit()
-        >>> c.add("key","value")
+        >>> c.set("key","value")
         >>> c.delete("key")
         >>> c._cache["key"]
         Traceback (most recent call last):
@@ -101,8 +101,8 @@ class CacheWithTimeLimit(object):
     def flush(self):
         """
         >>> c=CacheWithTimeLimit()
-        >>> c.add("key1","value1")
-        >>> c.add("key2","value2")
+        >>> c.set("key1","value1")
+        >>> c.set("key2","value2")
         >>> c.flush()
         >>> c.get("key1")
         Traceback (most recent call last):

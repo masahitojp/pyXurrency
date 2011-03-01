@@ -20,24 +20,24 @@ class TestXurrency(object):
         restore()
 
     @with_setup(setUp, tearDown)
-    def test_getRate_one(self):
+    def test_get_rate_one(self):
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy'),
+            pyx.get_rate('eur', 'jpy'),
             81
             )
 
     @with_setup(setUp, tearDown)
-    def test_getRate_decimal(self):
+    def test_get_rate_decimal(self):
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )
 
     @with_setup(teardown=tearDown)
     @raises(xurrency.XurrencyAPIInvalidCurrenciesError)
-    def test_getRate_InvalidCurrenciesError(self):
+    def test_get_rate_InvalidCurrenciesError(self):
         urlopen_result = Mock('urlobject')
         urlopen_result.read = Mock(
             'urlobj.read', returns='''
@@ -48,13 +48,13 @@ class TestXurrency(object):
             'urlopen', returns=urlopen_result)
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )
 
     @with_setup(teardown=tearDown)
     @raises(xurrency.XurrencyAPILimitReachedError)
-    def test_getRate_APILimitReachedError(self):
+    def test_get_rate_APILimitReachedError(self):
         urlopen_result = Mock('urlobject')
         urlopen_result.read = Mock(
             'urlobj.read', returns='''
@@ -67,13 +67,13 @@ class TestXurrency(object):
             'urlopen', returns=urlopen_result)
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )
 
     @with_setup(teardown=tearDown)
     @raises(xurrency.XurrencyAPIInvalidKeyError)
-    def test_getRate_APIInvalidKeyError(self):
+    def test_get_rate_APIInvalidKeyError(self):
         urlopen_result = Mock('urlobject')
         urlopen_result.read = Mock(
             'urlobj.read', returns='''
@@ -85,13 +85,13 @@ class TestXurrency(object):
             'urlopen', returns=urlopen_result)
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )
 
     @with_setup(teardown=tearDown)
     @raises(xurrency.XurrencyError)
-    def test_getRate_XurrencyError(self):
+    def test_get_rate_XurrencyError(self):
         urlopen_result = Mock('urlobject')
         urlopen_result.read = Mock(
             'urlobj.read', returns='''
@@ -103,45 +103,45 @@ class TestXurrency(object):
             'urlopen', returns=urlopen_result)
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )
 
     @with_setup(setUp, tearDown)
     @raises(xurrency.XurrencyError)
-    def test_getRate_XurrencyError_InvalidCurrency(self):
+    def test_get_rate_XurrencyError_InvalidCurrency(self):
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('invalid', 'jpy', 37.2),
+            pyx.get_rate('invalid', 'jpy', 37.2),
             81 * 37.2
             )
 
     @with_setup(teardown=tearDown)
     @raises(xurrency.XurrencyURLError)
-    def test_getRate_URLError(self):
+    def test_get_rate_URLError(self):
         xurrency.urllib2.urlopen = \
                 Mock('urlopen', raises=urllib2.URLError(''))
         pyx = xurrency.Xurrency()
-        pyx.getRate('eur', 'jpy')
+        pyx.get_rate('eur', 'jpy')
 
     @with_setup(teardown=tearDown)
     @raises(xurrency.XurrencyHTTPError)
-    def test_getRate_HTTPError(self):
+    def test_get_rate_HTTPError(self):
         xurrency.urllib2.urlopen = \
                 Mock('urlopen', \
                 raises=urllib2.HTTPError('url', 401, '', {}, None))
         pyx = xurrency.Xurrency()
-        pyx.getRate('eur', 'jpy')
+        pyx.get_rate('eur', 'jpy')
 
     @with_setup(setUp, tearDown)
-    def test_getRate_WithValue_InvalidCurrenciesError(self):
+    def test_get_rate_WithValue_InvalidCurrenciesError(self):
         """
         Even if XurrencyAPIInvalidCurrenciesError is returned after execute,
         the value has already been used if it has cached it.
         """
         pyx = xurrency.Xurrency()
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )
 
@@ -152,6 +152,6 @@ class TestXurrency(object):
   "message": "The api key is not valid"}
 ''')
         assert_equals(
-            pyx.getRate('eur', 'jpy', 37.2),
+            pyx.get_rate('eur', 'jpy', 37.2),
             81 * 37.2
             )

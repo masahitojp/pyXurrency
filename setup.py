@@ -1,22 +1,34 @@
+import sys
+import os
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup, find_packages 
 
 VERSION = '0.0.1'
-long_description = ''
+LONG_DESCRIPTION = \
+    open(os.path.join("src","README.txt")).read() + \
+    open(os.path.join("src","TODO.txt")).read()
+
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Python Software Foundation License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Topic :: Software Development",
 ]
 
 setup(
     name='pyXurrency',
     version=VERSION,
-    description='',
-    long_description=long_description,
-    keywords=[],
-    author='',
-    author_email='',
-    url='',
+    description='A Python interface to the Xurrency API',
+    long_description=LONG_DESCRIPTION,
+    classifiers=classifiers,
+    keywords=['currency',],
+    author='Masahito(Nakamura Masato)',
+    author_email='randomstep at gmail dot com',
+    url='https://github.com/masahitojp/pyXurrency',
     zip_safe=False,
     install_requires=[],
     license='PSL',

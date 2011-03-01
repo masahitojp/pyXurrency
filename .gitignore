@@ -7,6 +7,6 @@ develop-eggs
 dist
 eggs
 parts
-src/pyXurrency.egg-info 
-doc/coverage 
+src/pyXurrency.egg-info/*
+doc/coverage
 .coverage
