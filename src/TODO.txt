@@ -1,0 +1,11 @@
+Todos
+======
+
+Functionals
+------------
+* Add CUI Interface
+
+Known Issues
+-------------
+* No error handling
+
