@@ -37,6 +37,10 @@ or You have License Key  ::
 History
 -------
 
+0.1 alpha (2026-11-xx)
+~~~~~~~~~~~~~~~~~~~~~~
+* support python3.x
+
 0.0.1 (2011-03-01)
 ~~~~~~~~~~~~~~~~~~
 * first release
